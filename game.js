@@ -203,7 +203,7 @@ scene("menu", () => {
 
     // Instrucciones simples para el niño
     add([
-        text("Presiona ESPACIO para jugar", { size: 24 }),
+        text("ESPACIO o TOCA para jugar", { size: 24 }),
         pos(width() / 2, height() / 2),
         anchor("center"),
         color(50, 50, 200), // Azul oscuro
@@ -212,7 +212,7 @@ scene("menu", () => {
 
     // Fondo para instrucciones de control
     add([
-        rect(300, 40),
+        rect(350, 40),
         pos(width() / 2, height() / 2 + 60),
         anchor("center"),
         color(100, 255, 100), // Verde claro
@@ -222,7 +222,7 @@ scene("menu", () => {
 
     // Instrucciones de control
     add([
-        text("ESPACIO = Saltar", { size: 20 }),
+        text("ESPACIO o TOCA = Saltar", { size: 20 }),
         pos(width() / 2, height() / 2 + 60),
         anchor("center"),
         color(0, 100, 0), // Verde oscuro
@@ -250,6 +250,11 @@ scene("menu", () => {
 
     // Cuando presiona ESPACIO, va al juego
     onKeyPress("space", () => {
+        go("game");
+    });
+
+    // Cuando toca la pantalla, va al juego (para móviles)
+    onClick(() => {
         go("game");
     });
 });
@@ -444,8 +449,8 @@ scene("game", () => {
         ]);
     }
 
-    // Define el salto del personaje
-    onKeyPress("space", () => {
+    // Función para hacer saltar al personaje (reutilizable)
+    function makePlayerJump() {
         if (player.isGrounded()) {
             player.jump();
             playJumpSound();
@@ -471,6 +476,16 @@ scene("game", () => {
                 });
             }
         }
+    }
+
+    // Define el salto del personaje con teclado
+    onKeyPress("space", () => {
+        makePlayerJump();
+    });
+
+    // Define el salto del personaje con toque (para móviles)
+    onClick(() => {
+        makePlayerJump();
     });
 
     // Función para crear enemigos
@@ -628,7 +643,7 @@ scene("gameover", () => {
 
     // Fondo para instrucciones
     add([
-        rect(380, 40),
+        rect(450, 40),
         pos(width() / 2, height() / 2 + 80),
         anchor("center"),
         color(255, 255, 100), // Amarillo claro
@@ -638,7 +653,7 @@ scene("gameover", () => {
 
     // Instrucciones para reiniciar
     add([
-        text("Presiona R para volver al menú", { size: 24 }),
+        text("Presiona R o TOCA para volver al menú", { size: 22 }),
         pos(width() / 2, height() / 2 + 80),
         anchor("center"),
         color(150, 100, 0), // Marrón/naranja
@@ -650,6 +665,11 @@ scene("gameover", () => {
 
     // Cuando presiona R, vuelve al menú
     onKeyPress("r", () => {
+        go("menu");
+    });
+
+    // Cuando toca la pantalla, vuelve al menú (para móviles)
+    onClick(() => {
         go("menu");
     });
 });
